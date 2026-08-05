@@ -152,19 +152,17 @@ document.querySelectorAll('.ff-partner, .ff-stat, .ff-aud, .ff-vendor').forEach(
     }
   }
 
-  // Pre-Register CTAs use the Sweatpals buy-ticket overlay + checkout script,
-  // which opens the Sweatpals waitlist / sign-up modal in-page. The visible OTT
-  // button sits under an invisible Sweatpals iframe inside .ff-rsvp-trigger, so the
-  // click lands on Sweatpals. Fire a best-effort Amplitude event and Meta "Lead"
-  // on pointerdown over each trigger (Sweatpals also fires
-  // CompleteRegistration/Purchase to the same pixel from its own flow).
-  document.querySelectorAll('.ff-rsvp-trigger').forEach((el) => {
-    el.addEventListener('pointerdown', () => {
+  // Register CTAs link straight to the Sweatpals event page (new tab).
+  // Fire the Amplitude event + Meta "Lead" (registration intent) on click;
+  // Sweatpals fires Purchase/CompleteRegistration to the same pixel on signup.
+  document.querySelectorAll('[data-register]').forEach((el) => {
+    el.addEventListener('click', () => {
       const section = el.closest('section');
-      track('cta_pre_register_clicked', {
-        location: section ? section.id || 'unknown' : 'nav'
+      track('cta_register_clicked', {
+        location: section ? section.id || 'unknown' : 'nav',
+        text: el.textContent.trim()
       });
-      metaTrack('Lead', { content_name: 'Endless Summer Pool Party Pre-Register' });
+      metaTrack('Lead', { content_name: 'Endless Summer Pool Party Register' });
     });
   });
 
