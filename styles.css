@@ -727,12 +727,15 @@ button { font: inherit; }
 .card--dj .card__img { object-position: center top; }
 .card--dj .card__toggle { display: none; }
 
-/* DJ lineup: static 2-up grid (no carousel) */
+/* DJ lineup: static grid (no carousel) */
 .lineup-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 20px;
-  max-width: 760px;
+  max-width: 1140px;
+}
+@media (max-width: 900px) {
+  .lineup-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 760px; }
 }
 @media (max-width: 600px) {
   .lineup-grid { grid-template-columns: 1fr; gap: 16px; }
