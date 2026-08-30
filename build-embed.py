@@ -14,7 +14,7 @@ import re
 from pathlib import Path
 
 HERE = Path(__file__).parent
-REPO_BASE = "https://gabrielgalarza-create.github.io/endless-summer-pool-party"
+REPO_BASE = "https://gabrielgalarza.github.io/endless-summer-pool-party"
 PFX, SCOPE = "ff-", ".ottff"
 
 RESET = """/* ===== Embed reset: isolate from host (Webflow) styles ===== */
