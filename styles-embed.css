@@ -484,8 +484,6 @@
   display: block;
 }
 .ottff .ff-card__img[src*="dj-sets"], .ottff .ff-card__img[src*="singalong"] { object-position: center top; }
-.ottff .ff-card__img[src*="jazz-fm"] { object-position: center 22%; }
-.ottff .ff-card__img[src*="flygerian-jeff"] { object-position: center 18%; }
 .ottff .ff-card__body {
   position: relative;
   padding: 22px 22px 24px;
@@ -666,7 +664,7 @@
 .ottff .ff-card--dark .ff-card__attr { color: rgba(255,255,255,.55); }
 .ottff .ff-card--dark .ff-card__expand p { color: rgba(255,255,255,.85); }
 .ottff .ff-card--dark .ff-card__toggle { background: var(--yellow); color: var(--black); }
-.ottff .ff-card--dj .ff-card__img { object-position: center top; }
+.ottff .ff-card--dj .ff-card__img { aspect-ratio: 4 / 5; object-position: center; }
 .ottff .ff-card--dj .ff-card__toggle { display: none; }
 .ottff .ff-lineup-grid {
   display: grid;

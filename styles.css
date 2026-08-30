@@ -517,8 +517,6 @@ button { font: inherit; }
 /* Portrait shots: anchor crop to top so the subject's face is visible */
 .card__img[src*="dj-sets"],
 .card__img[src*="singalong"] { object-position: center top; }
-.card__img[src*="jazz-fm"] { object-position: center 22%; }
-.card__img[src*="flygerian-jeff"] { object-position: center 18%; }
 .card__body {
   position: relative;
   padding: 22px 22px 24px;
@@ -726,7 +724,8 @@ button { font: inherit; }
 .card--dark .card__toggle { background: var(--yellow); color: var(--black); }
 
 /* DJ card variant: portrait crop, no toggle */
-.card--dj .card__img { object-position: center top; }
+/* DJ cards carry the 4:5 event flyers, shown whole rather than square-cropped */
+.card--dj .card__img { aspect-ratio: 4 / 5; object-position: center; }
 .card--dj .card__toggle { display: none; }
 
 /* DJ lineup: static grid (no carousel) */
