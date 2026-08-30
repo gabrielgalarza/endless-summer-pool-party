@@ -152,7 +152,47 @@ def ascii_encode(s: str) -> str:
     return s.encode("ascii", "xmlcharrefreplace").decode("ascii")
 
 
-def build_html() -> str:
+def build_body() -> str:
+    """The scoped markup alone — no <link>/<script> tags. Fetched at runtime by the loader."""
+    return f'<div class="ottff">\n{extract_body()}\n</div>\n'
+
+
+def build_loader() -> str:
+    """Tiny paste-once snippet: pulls markup, CSS and JS from Pages at page load."""
+    return f"""<!-- Endless Summer Pool Party - live embed. Paste once; it self-updates from the repo. -->
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="{REPO_BASE}/styles-embed.css" />
+<div id="ott-embed"></div>
+<script>
+(function () {{
+  var BASE = "{REPO_BASE}";
+  var mount = document.getElementById("ott-embed");
+  if (!mount) return;
+  fetch(BASE + "/embed-body.html", {{ cache: "no-cache" }})
+    .then(function (r) {{
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.text();
+    }})
+    .then(function (html) {{
+      mount.innerHTML = html;
+      var s = document.createElement("script");
+      s.src = BASE + "/script-embed.js";
+      s.async = false;
+      document.body.appendChild(s);
+    }})
+    .catch(function (err) {{
+      mount.innerHTML =
+        '<p style="font-family:Inter,system-ui,sans-serif;text-align:center;padding:48px 20px;font-size:16px;">' +
+        'Endless Summer Pool Party &#183; Sat Sep 12 &#183; Hotel Nikko San Francisco<br />' +
+        '<a href="https://events.sweatpals.com/bf4bd2bd" style="text-decoration:underline;font-weight:600;">Register &#8594;</a></p>';
+      if (window.console) console.error("OTT embed failed to load:", err);
+    }});
+}})();
+</script>
+"""
+
+
+def extract_body() -> str:
     html = (HERE / "index.html").read_text()
     body_m = re.search(r"<body[^>]*>(.*)</body>", html, flags=re.S | re.I)
     if not body_m:
@@ -167,7 +207,10 @@ def build_html() -> str:
     body = prefix_class_attrs(body)
     body = absolutize_attrs(body)
     body = ascii_encode(body)
+    return body.strip()
 
+
+def build_html() -> str:
     fonts = (
         '<link href="https://fonts.googleapis.com/css2?'
         'family=Archivo+Black&family=Inter:wght@400;500;600;700;800;900&display=swap" '
@@ -180,7 +223,7 @@ def build_html() -> str:
         "<!-- Endless Summer Pool Party - namespaced NATIVE embed (prefixed classes) -->\n"
         f"{fonts}\n{css_link}\n"
         '<div class="ottff">\n'
-        f"{body.strip()}\n\n"
+        f"{extract_body()}\n\n"
         f"{js_tag}\n"
         "</div>\n"
     )
@@ -225,8 +268,11 @@ def build_js() -> str:
 def main():
     (HERE / "styles-embed.css").write_text(build_css())
     (HERE / "embed-native.html").write_text(build_html())
+    (HERE / "embed-body.html").write_text(build_body())
+    (HERE / "webflow-embed.html").write_text(build_loader())
     (HERE / "script-embed.js").write_text(build_js())
-    print("Wrote styles-embed.css, embed-native.html, script-embed.js")
+    print("Wrote styles-embed.css, embed-native.html, embed-body.html, "
+          "webflow-embed.html, script-embed.js")
 
 
 if __name__ == "__main__":
